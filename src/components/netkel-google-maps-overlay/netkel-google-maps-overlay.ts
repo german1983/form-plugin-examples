@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import { customElement, property } from "lit/decorators";
+import { customElement, property } from 'lit/decorators.js';
 import { styles } from './netkel-google-maps-overlay.styles';
 
 @customElement('netkel-google-maps-overlay')
