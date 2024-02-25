@@ -1,5 +1,5 @@
-import { i, _ as _decorate, s, e, y, a as e$1 } from './query-assigned-elements-5558b813.js';
-import { i as i$1 } from './style-map-82785fc5.js';
+import { i, _ as _decorate, s, e, x, a as e$1 } from './query-assigned-elements-f8b1b870.js';
+import { o } from './style-map-09ef3963.js';
 import { u as updatePluginValue } from './events-df7d0bd4.js';
 import './directive-2bb7789e.js';
 
@@ -12676,13 +12676,14 @@ let NintexSampleChartJs = _decorate([e$1('form-plugin-chart-js')], function (_in
       static: true,
       key: "getMetaConfig",
       value: function getMetaConfig() {
-        return import('./chart-pie.config-ba7bb7bd.js').then(x => x.config);
+        return import('./chart-pie.config-3d9d96da.js').then(x => x.config);
       }
     }, {
       kind: "method",
       key: "updated",
       value: function updated() {
-        const el = this.shadowRoot?.querySelector('.chart-container');
+        var _this$shadowRoot;
+        const el = (_this$shadowRoot = this.shadowRoot) === null || _this$shadowRoot === void 0 ? void 0 : _this$shadowRoot.querySelector('.chart-container');
         if (!el) {
           return;
         }
@@ -12720,7 +12721,8 @@ let NintexSampleChartJs = _decorate([e$1('form-plugin-chart-js')], function (_in
             },
             onClick: (event, elements, chart) => {
               if (chart.data && chart.data.labels) {
-                const label = chart.data?.labels[elements[0].index];
+                var _chart$data;
+                const label = (_chart$data = chart.data) === null || _chart$data === void 0 ? void 0 : _chart$data.labels[elements[0].index];
                 updatePluginValue(this, {
                   detail: label
                 });
@@ -12737,13 +12739,13 @@ let NintexSampleChartJs = _decorate([e$1('form-plugin-chart-js')], function (_in
         const elementStyles = {
           maxHeight: this.maxHeight ? `${this.maxHeight}px` : '400px'
         };
-        return y`
+        return x`
       <canvas
         id="myChart"
         class="chart-container"
         aria-label="Chart with Name"
         role="img"
-        style=${i$1(elementStyles)}
+        style=${o(elementStyles)}
       ></canvas>
     `;
       }

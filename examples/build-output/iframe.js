@@ -1,5 +1,5 @@
-import { i, _ as _decorate, s, e, y, a as e$1 } from './query-assigned-elements-5558b813.js';
-import { i as i$1 } from './style-map-82785fc5.js';
+import { i, _ as _decorate, s, e, x, a as e$1 } from './query-assigned-elements-f8b1b870.js';
+import { o } from './style-map-09ef3963.js';
 import './directive-2bb7789e.js';
 
 const baseStyle = i`
@@ -67,6 +67,7 @@ let NintexSampleIframe = _decorate([e$1('form-plugin-iframe')], function (_initi
       key: "getMetaConfig",
       value:
       // Define scoped styles right with your component, in plain CSS
+      //Add custom CSS. See https://help.nintex.com/en-US/formplugins/Reference/Style.htm
 
       function getMetaConfig() {
         // plugin contract information
@@ -78,6 +79,7 @@ let NintexSampleIframe = _decorate([e$1('form-plugin-iframe')], function (_initi
           groupName: 'Visual',
           version: '1.3',
           properties: {
+            //Custom configuration fields. See https://help.nintex.com/en-US/formplugins/Reference/CustomField.htm
             src: {
               type: 'string',
               title: 'Source URL',
@@ -98,6 +100,7 @@ let NintexSampleIframe = _decorate([e$1('form-plugin-iframe')], function (_initi
           },
           standardProperties: {
             readOnly: true,
+            //Add a read-only mode. See https://help.nintex.com/en-US/formplugins/Reference/ReadOnly.htm
             required: true,
             description: true
           }
@@ -118,9 +121,9 @@ let NintexSampleIframe = _decorate([e$1('form-plugin-iframe')], function (_initi
         let styles = {
           height: this.height + 'px'
         };
-        return y` <iframe
+        return x` <iframe
       class="frame"
-      style=${i$1(styles)}
+      style=${o(styles)}
       .name="${this.name}"
       allow="geolocation *; microphone; camera"
       .title="${this.description}"

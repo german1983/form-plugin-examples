@@ -1,6 +1,6 @@
-import { i, e as e$1, y, a as e$2, b, _ as _decorate, s } from './query-assigned-elements-5558b813.js';
-import { o, _ as __extends, d as __values, a as __assign, M as MDCFoundation, b as __decorate, t, i as i$1, B as BaseElement, c as o$1, F as FormElement, l, f as deepActiveElementPath } from './if-defined-f7980c7a.js';
-import { i as i$2 } from './style-map-82785fc5.js';
+import { i, e as e$1, x, a as e$2, A, _ as _decorate, s } from './query-assigned-elements-f8b1b870.js';
+import { o, _ as __extends, a as __values, b as __assign, M as MDCFoundation, c as __decorate, t, i as i$1, B as BaseElement, d as o$1, F as FormElement, l, e as deepActiveElementPath } from './if-defined-08a62fa2.js';
+import { o as o$2 } from './style-map-09ef3963.js';
 import { u as updatePluginValue } from './events-df7d0bd4.js';
 import './directive-2bb7789e.js';
 
@@ -806,9 +806,9 @@ class RippleBase extends BaseElement {
             'mdc-ripple-upgraded--unbounded': this.unbounded,
             'mdc-ripple-surface--internal-use-state-layer-custom-properties': this.internalUseStateLayerCustomProperties,
         };
-        return y `
+        return x `
         <div class="mdc-ripple-surface mdc-ripple-upgraded ${o$1(classes)}"
-          style="${i$2({
+          style="${o$2({
             '--mdc-ripple-fg-scale': this.fgScale,
             '--mdc-ripple-fg-size': this.fgSize,
             '--mdc-ripple-fg-translate-end': this.translateEnd,
@@ -2385,7 +2385,7 @@ class SliderBase extends FormElement {
         super.update(changed);
     }
     render() {
-        return this.renderRootEl(y `
+        return this.renderRootEl(x `
       ${this.renderStartInput()}
       ${this.renderEndInput()}
       ${this.renderTrack()}
@@ -2398,7 +2398,7 @@ class SliderBase extends FormElement {
             'mdc-slider--disabled': this.disabled,
             'mdc-slider--discrete': this.discrete,
         });
-        return y `
+        return x `
     <div
         class="mdc-slider ${rootClasses}"
         @pointerdown=${this.onPointerdown}
@@ -2408,11 +2408,11 @@ class SliderBase extends FormElement {
     </div>`;
     }
     renderStartInput() {
-        return b;
+        return A;
     }
     renderEndInput() {
         var _a;
-        return y `
+        return x `
       <input
           class="mdc-slider__input end"
           type="range"
@@ -2432,27 +2432,27 @@ class SliderBase extends FormElement {
     `;
     }
     renderTrack() {
-        return b;
+        return A;
     }
     renderTickMarks() {
-        return !this.withTickMarks ? b : y `
+        return !this.withTickMarks ? A : x `
       <div class="mdc-slider__tick-marks">
         ${this.tickMarks.map((tickMark) => {
             const isActive = tickMark === TickMark.ACTIVE;
-            return y `<div class="${isActive ? 'mdc-slider__tick-mark--active' :
+            return x `<div class="${isActive ? 'mdc-slider__tick-mark--active' :
                 'mdc-slider__tick-mark--inactive'}"></div>`;
         })}
       </div>`;
     }
     renderStartThumb() {
-        return b;
+        return A;
     }
     renderEndThumb() {
         const endThumbClasses = o$1({
             'mdc-slider__thumb--with-indicator': this.endThumbWithIndicator,
             'mdc-slider__thumb--top': this.endThumbTop,
         });
-        const endThumbStyles = i$2(Object.assign({ '-webkit-transform': this.endThumbTransformStyle, 'transform': this.endThumbTransformStyle, '-webkit-transition': this.endThumbTransitionStyle, 'transition': this.endThumbTransitionStyle, 'left': this.endThumbTransformStyle ?
+        const endThumbStyles = o$2(Object.assign({ '-webkit-transform': this.endThumbTransformStyle, 'transform': this.endThumbTransformStyle, '-webkit-transition': this.endThumbTransitionStyle, 'transition': this.endThumbTransitionStyle, 'left': this.endThumbTransformStyle ?
                 '' :
                 getComputedStyle(this).direction === 'rtl' ?
                     '' :
@@ -2464,9 +2464,9 @@ class SliderBase extends FormElement {
                     `calc(${(this.valueEnd - this.min) / (this.max - this.min) *
                         100}% - 24px)` }, this.endThumbCssProperties));
         const ripple = !this.shouldRenderEndRipple ?
-            b :
-            y `<mwc-ripple class="ripple" unbounded></mwc-ripple>`;
-        return y `
+            A :
+            x `<mwc-ripple class="ripple" unbounded></mwc-ripple>`;
+        return x `
       <div
           class="mdc-slider__thumb end ${endThumbClasses}"
           style=${endThumbStyles}
@@ -2479,7 +2479,7 @@ class SliderBase extends FormElement {
     `;
     }
     renderValueIndicator(text) {
-        return this.discrete ? y `
+        return this.discrete ? x `
     <div class="mdc-slider__value-indicator-container" aria-hidden="true">
       <div class="mdc-slider__value-indicator">
         <span class="mdc-slider__value-indicator-text">
@@ -2487,7 +2487,7 @@ class SliderBase extends FormElement {
         </span>
       </div>
     </div>` :
-            b;
+            A;
     }
     disconnectedCallback() {
         super.disconnectedCallback();
@@ -2684,7 +2684,7 @@ class SliderSingleBase extends SliderBase {
         this.valueEnd = newVal;
     }
     renderTrack() {
-        const trackStyles = i$2({
+        const trackStyles = o$2({
             'transform-origin': this.trackTransformOriginStyle,
             'left': this.trackLeftStyle,
             'right': this.trackRightStyle,
@@ -2693,7 +2693,7 @@ class SliderSingleBase extends SliderBase {
             '-webkit-transition': this.trackTransitionStyle,
             'transition': this.trackTransitionStyle,
         });
-        return y `
+        return x `
       <div class="mdc-slider__track">
         <div class="mdc-slider__track--inactive"></div>
         <div class="mdc-slider__track--active">
@@ -3001,7 +3001,7 @@ let NintexSampleSlider = _decorate([e$2('form-plugin-slider')], function (_initi
       static: true,
       key: "styles",
       value() {
-        return i`
+        return i` //Add custom CSS. See https://help.nintex.com/en-US/formplugins/Reference/Style.htm
     :host {
       /* height: 100%; */
       width: 100%;
@@ -3057,8 +3057,13 @@ let NintexSampleSlider = _decorate([e$2('form-plugin-slider')], function (_initi
       kind: "method",
       static: true,
       key: "getMetaConfig",
-      value: function getMetaConfig() {
-        return import('./material-slider.config-99651797.js').then(x => x.config);
+      value:
+      //Add a read-only mode. See https://help.nintex.com/en-US/formplugins/Reference/ReadOnly.htm
+
+      //A field to pass a value to the workflow as a variable. See https://help.nintex.com/en-US/formplugins/Reference/StoreValue.htm
+
+      function getMetaConfig() {
+        return import('./material-slider.config-4519094a.js').then(x => x.config);
       }
     }, {
       kind: "method",
@@ -3072,7 +3077,7 @@ let NintexSampleSlider = _decorate([e$2('form-plugin-slider')], function (_initi
         } else if (value > max) {
           value = max;
         }
-        return y`<label for="slider1">${this.titleField}</label>
+        return x`<label for="slider1">${this.titleField}</label>
       <mwc-slider
         id="slider1"
         .min=${min}

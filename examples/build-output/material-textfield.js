@@ -1,7 +1,7 @@
-import { e as e$1, y, i as i$1, a as e$2, x, b, _ as _decorate, s as s$1 } from './query-assigned-elements-5558b813.js';
-import { o, _ as __extends, a as __assign, M as MDCFoundation, b as __decorate, i, B as BaseElement, c as o$1, d as __values, t as t$1, F as FormElement, l as l$1, e as addHasRemoveClass } from './if-defined-f7980c7a.js';
+import { e as e$1, x, i as i$1, a as e$2, T, A, _ as _decorate, s as s$1 } from './query-assigned-elements-f8b1b870.js';
+import { o, _ as __extends, b as __assign, M as MDCFoundation, c as __decorate, i, B as BaseElement, d as o$1, a as __values, t as t$1, F as FormElement, l as l$1, f as addHasRemoveClass } from './if-defined-08a62fa2.js';
 import { e as e$3, i as i$2, t } from './directive-2bb7789e.js';
-import { e as e$4, s } from './directive-helpers-e9e1a73e.js';
+import { e as e$4, s } from './directive-helpers-3a87c54b.js';
 
 /**
  * @license
@@ -168,7 +168,7 @@ class NotchedOutlineBase extends BaseElement {
         const classes = o$1({
             'mdc-notched-outline--notched': this.open,
         });
-        return y `
+        return x `
       <span class="mdc-notched-outline ${classes}">
         <span class="mdc-notched-outline__leading"></span>
         <span class="mdc-notched-outline__notch">
@@ -1286,7 +1286,7 @@ var MDCTextFieldFoundation$1 = MDCTextFieldFoundation;
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */const l=e$3(class extends i$2{constructor(r){if(super(r),r.type!==t.PROPERTY&&r.type!==t.ATTRIBUTE&&r.type!==t.BOOLEAN_ATTRIBUTE)throw Error("The `live` directive is not allowed on child or event bindings");if(!e$4(r))throw Error("`live` bindings can only contain a single expression")}render(r){return r}update(i,[t$1]){if(t$1===x||t$1===b)return t$1;const o=i.element,l=i.name;if(i.type===t.PROPERTY){if(t$1===o[l])return x}else if(i.type===t.BOOLEAN_ATTRIBUTE){if(!!t$1===o.hasAttribute(l))return x}else if(i.type===t.ATTRIBUTE&&o.getAttribute(l)===t$1+"")return x;return s(i),t$1}});
+ */const l=e$3(class extends i$2{constructor(r){if(super(r),r.type!==t.PROPERTY&&r.type!==t.ATTRIBUTE&&r.type!==t.BOOLEAN_ATTRIBUTE)throw Error("The `live` directive is not allowed on child or event bindings");if(!e$4(r))throw Error("`live` bindings can only contain a single expression")}render(r){return r}update(i,[t$1]){if(t$1===T||t$1===A)return t$1;const o=i.element,l=i.name;if(i.type===t.PROPERTY){if(t$1===o[l])return T}else if(i.type===t.BOOLEAN_ATTRIBUTE){if(!!t$1===o.hasAttribute(l))return T}else if(i.type===t.ATTRIBUTE&&o.getAttribute(l)===t$1+"")return T;return s(i),t$1}});
 
 /**
  * @license
@@ -1420,7 +1420,7 @@ class TextFieldBase extends FormElement {
             'mdc-text-field--with-trailing-icon': this.iconTrailing,
             'mdc-text-field--end-aligned': this.endAligned,
         };
-        return y `
+        return x `
       <label class="mdc-text-field ${o$1(classes)}">
         ${this.renderRipple()}
         ${this.outlined ? this.renderOutline() : this.renderLabel()}
@@ -1445,13 +1445,13 @@ class TextFieldBase extends FormElement {
     }
     /** @soyTemplate */
     renderRipple() {
-        return this.outlined ? '' : y `
+        return this.outlined ? '' : x `
       <span class="mdc-text-field__ripple"></span>
     `;
     }
     /** @soyTemplate */
     renderOutline() {
-        return !this.outlined ? '' : y `
+        return !this.outlined ? '' : x `
       <mwc-notched-outline
           .width=${this.outlineWidth}
           .open=${this.outlineOpen}
@@ -1463,7 +1463,7 @@ class TextFieldBase extends FormElement {
     renderLabel() {
         return !this.label ?
             '' :
-            y `
+            x `
       <span
           .floatingLabelFoundation=${floatingLabel(this.label)}
           id="label">${this.label}</span>
@@ -1484,7 +1484,7 @@ class TextFieldBase extends FormElement {
             'mdc-text-field__icon--leading': !isTrailingIcon,
             'mdc-text-field__icon--trailing': isTrailingIcon
         };
-        return y `<i class="material-icons mdc-text-field__icon ${o$1(classes)}">${icon}</i>`;
+        return x `<i class="material-icons mdc-text-field__icon ${o$1(classes)}">${icon}</i>`;
     }
     /** @soyTemplate */
     renderPrefix() {
@@ -1501,7 +1501,7 @@ class TextFieldBase extends FormElement {
             'mdc-text-field__affix--prefix': !isSuffix,
             'mdc-text-field__affix--suffix': isSuffix
         };
-        return y `<span class="mdc-text-field__affix ${o$1(classes)}">
+        return x `<span class="mdc-text-field__affix ${o$1(classes)}">
         ${content}</span>`;
     }
     /** @soyTemplate */
@@ -1520,7 +1520,7 @@ class TextFieldBase extends FormElement {
         // TODO: live() directive needs casting for lit-analyzer
         // https://github.com/runem/lit-analyzer/pull/91/files
         // TODO: lit-analyzer labels min/max as (number|string) instead of string
-        return y `
+        return x `
       <input
           aria-labelledby=${l$1(ariaLabelledbyOrUndef)}
           aria-controls="${l$1(ariaControlsOrUndef)}"
@@ -1550,7 +1550,7 @@ class TextFieldBase extends FormElement {
     renderLineRipple() {
         return this.outlined ?
             '' :
-            y `
+            x `
       <span .lineRippleFoundation=${lineRipple()}></span>
     `;
     }
@@ -1566,7 +1566,7 @@ class TextFieldBase extends FormElement {
             undefined :
             'true';
         const helperText = showValidationMessage ? this.validationMessage : this.helper;
-        return !shouldRenderHelperText ? '' : y `
+        return !shouldRenderHelperText ? '' : x `
       <div class="mdc-text-field-helper-line">
         <div id="helper-text"
              aria-hidden="${l$1(ariaHiddenOrUndef)}"
@@ -1578,7 +1578,7 @@ class TextFieldBase extends FormElement {
     /** @soyTemplate */
     renderCharCounter(shouldRenderCharCounter) {
         const length = Math.min(this.value.length, this.maxLength);
-        return !shouldRenderCharCounter ? '' : y `
+        return !shouldRenderCharCounter ? '' : x `
       <span class="mdc-text-field-character-counter"
             >${length} / ${this.maxLength}</span>`;
     }
@@ -1985,7 +1985,12 @@ let NintexSampleTextfield = _decorate([e$2('form-plugin-textfield')], function (
       kind: "method",
       static: true,
       key: "getMetaConfig",
-      value: function getMetaConfig() {
+      value:
+      //Add custom CSS. See https://help.nintex.com/en-US/formplugins/Reference/Style.htm
+
+      //Add a read-only mode. See https://help.nintex.com/en-US/formplugins/Reference/ReadOnly.htm
+
+      function getMetaConfig() {
         // plugin contract information
         return {
           controlName: 'Material Text field',
@@ -1993,11 +1998,13 @@ let NintexSampleTextfield = _decorate([e$2('form-plugin-textfield')], function (
           iconUrl: 'one-line-text',
           version: '1',
           properties: {
+            //A custom configuration field. See https://help.nintex.com/en-US/formplugins/Reference/CustomField.htm
             outlined: {
               type: 'boolean',
               title: 'Show Outline'
             },
             value: {
+              //A field to pass a value to the workflow as a variable. See https://help.nintex.com/en-US/formplugins/Reference/StoreValue.htm
               type: 'string',
               title: 'Value',
               // this is to mark the field as value field. it should only be defined once in the list of properties
@@ -2009,7 +2016,7 @@ let NintexSampleTextfield = _decorate([e$2('form-plugin-textfield')], function (
             fieldLabel: true,
             description: true,
             defaultValue: true,
-            readOnly: true
+            readOnly: true //Add a read-only mode. See https://help.nintex.com/en-US/formplugins/Reference/ReadOnly.htm
           }
         };
       }
@@ -2019,7 +2026,7 @@ let NintexSampleTextfield = _decorate([e$2('form-plugin-textfield')], function (
       kind: "method",
       key: "render",
       value: function render() {
-        return y` <mwc-textfield
+        return x` <mwc-textfield
       id="textfield"
       .label="${this.label}"
       .helper="${this.description}"
@@ -2032,7 +2039,8 @@ let NintexSampleTextfield = _decorate([e$2('form-plugin-textfield')], function (
       kind: "method",
       key: "onChange",
       value: function onChange() {
-        const el = this.shadowRoot?.getElementById('textfield');
+        var _this$shadowRoot;
+        const el = (_this$shadowRoot = this.shadowRoot) === null || _this$shadowRoot === void 0 ? void 0 : _this$shadowRoot.getElementById('textfield');
         if (el) {
           fire(this, {
             detail: el.value

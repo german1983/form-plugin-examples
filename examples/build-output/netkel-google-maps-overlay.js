@@ -1,5 +1,4 @@
-import { i, _ as _decorate, s, x } from './lit-element-134c12fd.js';
-import { customElement, property } from 'lit/decorators';
+import { i, _ as _decorate, s, e, x, a as e$1 } from './query-assigned-elements-f8b1b870.js';
 
 const baseStyle = i`
   :host {
@@ -10,7 +9,7 @@ const baseStyle = i`
 `;
 const styles = [baseStyle];
 
-let NetKelGoogleMapsOverlay = _decorate([customElement('netkel-google-maps-overlay')], function (_initialize, _LitElement) {
+let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], function (_initialize, _LitElement) {
   class NetKelGoogleMapsOverlay extends _LitElement {
     constructor(...args) {
       super(...args);
@@ -28,7 +27,7 @@ let NetKelGoogleMapsOverlay = _decorate([customElement('netkel-google-maps-overl
       }
     }, {
       kind: "field",
-      decorators: [property({
+      decorators: [e({
         type: String
       })],
       key: "apiKey",
@@ -37,7 +36,7 @@ let NetKelGoogleMapsOverlay = _decorate([customElement('netkel-google-maps-overl
       }
     }, {
       kind: "field",
-      decorators: [property({
+      decorators: [e({
         type: String
       })],
       key: "overlayImageSourceUrl",
@@ -46,7 +45,7 @@ let NetKelGoogleMapsOverlay = _decorate([customElement('netkel-google-maps-overl
       }
     }, {
       kind: "field",
-      decorators: [property({
+      decorators: [e({
         type: String
       })],
       key: "pinCoordinates",
@@ -55,7 +54,7 @@ let NetKelGoogleMapsOverlay = _decorate([customElement('netkel-google-maps-overl
       }
     }, {
       kind: "field",
-      decorators: [property({
+      decorators: [e({
         type: String
       })],
       key: "pinName",

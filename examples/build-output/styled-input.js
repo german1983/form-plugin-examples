@@ -1,4 +1,4 @@
-import { _ as _decorate, s, i, e, y, a as e$1 } from './query-assigned-elements-5558b813.js';
+import { _ as _decorate, s, i, e, x, a as e$1 } from './query-assigned-elements-f8b1b870.js';
 
 let NintexStyledInput = _decorate([e$1('form-plugin-styled-input')], function (_initialize, _LitElement) {
   class NintexStyledInput extends _LitElement {
@@ -14,7 +14,7 @@ let NintexStyledInput = _decorate([e$1('form-plugin-styled-input')], function (_
       static: true,
       key: "styles",
       value() {
-        return i`
+        return i` 
     .form-control {
       color: var(--ntx-form-theme-color-secondary);
       background-color: var(
@@ -54,7 +54,9 @@ let NintexStyledInput = _decorate([e$1('form-plugin-styled-input')], function (_
       static: true,
       key: "getMetaConfig",
       value:
-      // Define scoped styles right with your component, in plain CSS
+      // Define scoped styles right with your component, in plain CSS.  See https://help.nintex.com/en-US/formplugins/Reference/Style.htm
+
+      //Add a read-only mode. See https://help.nintex.com/en-US/formplugins/Reference/ReadOnly.htm
 
       function getMetaConfig() {
         // plugin contract information
@@ -64,10 +66,13 @@ let NintexStyledInput = _decorate([e$1('form-plugin-styled-input')], function (_
           iconUrl: 'one-line-text',
           version: '1',
           properties: {
+            //A custom configuration field. See https://help.nintex.com/en-US/formplugins/Reference/CustomField.htm
             value: {
+              //A custom field to store the value. 
               type: 'string',
               title: 'Value',
-              // this is to mark the field as value field. it should only be defined once in the list of properties
+              /* This marks the field as the value field. Should only be defined once in the list of properties. 
+                 See https://help.nintex.com/en-US/formplugins/Reference/StoreValue.htm */
               isValueField: true,
               defaultValue: 'This is a text field default value'
             }
@@ -75,7 +80,7 @@ let NintexStyledInput = _decorate([e$1('form-plugin-styled-input')], function (_
           standardProperties: {
             fieldLabel: true,
             defaultValue: true,
-            readOnly: true
+            readOnly: true //Add a read-only mode. See https://help.nintex.com/en-US/formplugins/Reference/ReadOnly.htm
           }
         };
       }
@@ -85,7 +90,7 @@ let NintexStyledInput = _decorate([e$1('form-plugin-styled-input')], function (_
       kind: "method",
       key: "render",
       value: function render() {
-        return y`<input
+        return x`<input
       class="form-control"
       class="form-control"
       ?disabled="${this.readOnly}"
@@ -97,7 +102,8 @@ let NintexStyledInput = _decorate([e$1('form-plugin-styled-input')], function (_
       kind: "method",
       key: "onChange",
       value: function onChange(e) {
-        const value = e.target?.value;
+        var _e$target;
+        const value = (_e$target = e.target) === null || _e$target === void 0 ? void 0 : _e$target.value;
         const args = {
           bubbles: true,
           cancelable: false,
