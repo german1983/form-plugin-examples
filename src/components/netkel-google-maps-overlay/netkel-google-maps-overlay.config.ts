@@ -16,7 +16,8 @@ export const config: PluginContract = {
     },
     pinCoordinates: {
       type: 'string',
-      title: 'Comma separated values of coordinates in the format of "x,y" (e.g. "100,200")',
+      title: 'Pin coordinates',
+      description: 'Comma separated values of coordinates in the format of "x,y" (e.g. "100,200")',
     },
     pinName: {
       type: 'string',
