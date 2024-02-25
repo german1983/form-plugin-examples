@@ -77,11 +77,11 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
       key: "render",
       value: function render() {
         return x`<div id="map">
-        <span>This is the apiKey configured:<strong>@this.apiKey</strong></span>
+        <span>This is the apiKey configured:<strong>${this.apiKey}</strong></span>
         <ul>
-          <li>Overlay Image Source URL: <strong>@this.overlayImageSourceUrl</strong></li>
-          <li>Pin Coordinates: <strong>@this.pinCoordinates</strong></li>
-          <li>Pin Name: <strong>@this.pinName</strong></li>
+          <li>Overlay Image Source URL: <strong>${this.overlayImageSourceUrl}</strong></li>
+          <li>Pin Coordinates: <strong>${this.pinCoordinates}</strong></li>
+          <li>Pin Name: <strong>${this.pinName}</strong></li>
         </ul>
       </div>`;
       }

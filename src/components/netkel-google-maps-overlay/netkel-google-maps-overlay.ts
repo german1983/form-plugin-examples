@@ -27,11 +27,11 @@ export class NetKelGoogleMapsOverlay extends LitElement {
 
   render() {
       return html`<div id="map">
-        <span>This is the apiKey configured:<strong>@this.apiKey</strong></span>
+        <span>This is the apiKey configured:<strong>${this.apiKey}</strong></span>
         <ul>
-          <li>Overlay Image Source URL: <strong>@this.overlayImageSourceUrl</strong></li>
-          <li>Pin Coordinates: <strong>@this.pinCoordinates</strong></li>
-          <li>Pin Name: <strong>@this.pinName</strong></li>
+          <li>Overlay Image Source URL: <strong>${this.overlayImageSourceUrl}</strong></li>
+          <li>Pin Coordinates: <strong>${this.pinCoordinates}</strong></li>
+          <li>Pin Name: <strong>${this.pinName}</strong></li>
         </ul>
       </div>`;
   }
