@@ -1,5 +1,5 @@
 import { LitElement, html } from "lit";
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, query } from 'lit/decorators.js';
 import { styles } from './netkel-google-maps-overlay.styles';
 
 @customElement('netkel-google-maps-overlay')
@@ -18,6 +18,18 @@ export class NetKelGoogleMapsOverlay extends LitElement {
   @property({ type: String })
   pinName = '';
 
+  @property({ type: Object })
+  map: any = null;
+
+  @property({ type: Object })
+  marker: any = null;
+
+  @property({ type: Object })
+  imageBounds: any = null;
+
+  @query('#map')
+  mapElement!: HTMLElement;
+
   static getMetaConfig() {
       return import('./netkel-google-maps-overlay.config')
         .then(({ config }) => {
@@ -26,19 +38,104 @@ export class NetKelGoogleMapsOverlay extends LitElement {
   }
 
   render() {
-      return html`<div id="map">
-        <span>This is the apiKey configured:<strong>${this.apiKey}</strong></span>
-        <ul>
-          <li>Overlay Image Source URL: <strong>${this.overlayImageSourceUrl}</strong></li>
-          <li>Pin Coordinates: <strong>${this.pinCoordinates}</strong></li>
-          <li>Pin Name: <strong>${this.pinName}</strong></li>
-        </ul>
-      </div>`;
+    this.initMap();
+
+    return html` <div id="map-container">
+        <div id="map"></div>
+        <div id="map-init">
+          <span>This is the apiKey configured:<strong>${this.apiKey}</strong></span>
+          <ul>
+            <li>Overlay Image Source URL: <strong>${this.overlayImageSourceUrl}</strong></li>
+            <li>Pin Coordinates: <strong>${this.pinCoordinates}</strong></li>
+            <li>Pin Name: <strong>${this.pinName}</strong></li>
+          </ul>
+          </div>
+        </div>`;
   }
 
   firstUpdated() {
       // Load the Google Maps API
       const script = document.createElement('script');
       script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=initMap`;
+
+     
   }
+
+  initMap() {
+    var image = new Image();
+    image.onload = function() {
+        var anchoImg = image.width;
+        var largoImg = image.height;
+        console.log('Ancho de la imagen:', anchoImg);
+        console.log('Largo de la imagen:', largoImg);
+
+        // limites de la img
+        this.imageBounds = {
+            north: largoImg / 2,
+            south: -largoImg / 2,
+            east: anchoImg / 2,
+            west: -anchoImg / 2
+        };
+
+        // ajustar mapa en html al tamaño de la imagen
+        this.mapElement.style.width = anchoImg + 'px';
+        this.mapElement.style.height = largoImg + 'px';
+
+        //  mapa
+        this.map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 0, lng: 0},
+            zoom: 2,
+            streetViewControl: false,
+            mapTypeControl: false,
+            fullscreenControl: false,
+            draggable: false,
+            zoomControl: false,
+            gestureHandling: 'none'
+        });
+
+        // cargar la imagen como un overlay
+        var overlay = new google.maps.GroundOverlay(
+          this.imageUrl,
+          this.imageBounds
+        );
+        overlay.setMap(map);
+
+        // pin en el centro
+        this.marker = new google.maps.Marker({
+            position: {lat: 0, lng: 0},
+            map: map,
+            draggable: true
+        });
+
+        // evento de arrastre de pin
+        this.marker.addListener('dragend', function(event) {
+            var centerLat = (this.imageBounds.north + this.imageBounds.south) / 2;
+            var centerLng = (this.imageBounds.east + this.imageBounds.west) / 2;
+        
+            // calcular la distancia desde el centro hasta el borde en ambas direcciones
+            var distX = Math.abs(this.imageBounds.east - centerLng) + Math.abs(centerLng - this.imageBounds.west);
+            console.log(distX)
+            var distY = Math.abs(this.imageBounds.north - centerLat) + Math.abs(centerLat - this.imageBounds.south);
+
+        
+            var projection = this.map.getProjection();
+            var pinPixel = projection.fromLatLngToPoint(event.latLng);
+            var centerPixel = projection.fromLatLngToPoint(new google.maps.LatLng(centerLat, centerLng));
+            var distPinX = pinPixel.x - centerPixel.x;
+            var distPinY = -(pinPixel.y - centerPixel.y);
+
+        
+            // calcular las coordenadas normalizadas en el rango de -100 a 100
+            var coordX = (100 * distPinX) / distX;
+            var coordY = (100 * distPinY) / distY;
+        
+            console.log("Coordenadas normalizadas:");
+            console.log("X:", coordX);
+            console.log("Y:", coordY);
+        });
+        
+    };
+    image.src = this.imageUrl;
+  }
+
 }
