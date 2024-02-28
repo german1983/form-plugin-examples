@@ -56,9 +56,9 @@ export class NetKelGoogleMapsOverlay extends LitElement {
   firstUpdated() {
       // Load the Google Maps API
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=initMap`;
-
-     
+      const tempKey = "AIzaSyAFl85gwaOT8M0UhdA1g3rfh7IG6_pzMCA";
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${tempKey}&callback=initMap`;
+      
   }
 
   initMap() {
@@ -77,12 +77,13 @@ export class NetKelGoogleMapsOverlay extends LitElement {
             west: -anchoImg / 2
         };
 
+        const mapElement = (this.shadowRoot?.getElementById('map') as HTMLElement);
         // ajustar mapa en html al tamaño de la imagen
-        this.mapElement.style.width = anchoImg + 'px';
-        this.mapElement.style.height = largoImg + 'px';
+        mapElement!.style.width = anchoImg + 'px';
+        mapElement!.style.height = largoImg + 'px';
 
         //  mapa
-        this.map = new google.maps.Map(document.getElementById('map'), {
+        this.map = new google.maps.Map(mapElement, {
             center: {lat: 0, lng: 0},
             zoom: 2,
             streetViewControl: false,
