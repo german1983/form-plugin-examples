@@ -8,6 +8,7 @@ export { NintexSampleGirdJs } from './grid-js.js';
 import './query-assigned-elements-f8b1b870.js';
 import './style-map-09ef3963.js';
 import './directive-2bb7789e.js';
-import './if-defined-08a62fa2.js';
+import './if-defined-ed69dc08.js';
+import './query-970c10e5.js';
 import './directive-helpers-3a87c54b.js';
 import './events-df7d0bd4.js';

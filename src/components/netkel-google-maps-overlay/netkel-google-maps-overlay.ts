@@ -30,6 +30,8 @@ export class NetKelGoogleMapsOverlay extends LitElement {
   @query('#map')
   mapElement!: HTMLElement;
 
+  infoWindow: google.maps.InfoWindow | null = null;
+
   static getMetaConfig() {
       return import('./netkel-google-maps-overlay.config')
         .then(({ config }) => {
@@ -56,18 +58,14 @@ export class NetKelGoogleMapsOverlay extends LitElement {
   firstUpdated() {
       // Load the Google Maps API
       const script = document.createElement('script');
-      const tempKey = "AIzaSyAFl85gwaOT8M0UhdA1g3rfh7IG6_pzMCA";
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${tempKey}&callback=initMap`;
-      
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=initMap`;
   }
 
   initMap() {
     var image = new Image();
-    image.onload = function() {
+    image.onload = () => {
         var anchoImg = image.width;
         var largoImg = image.height;
-        console.log('Ancho de la imagen:', anchoImg);
-        console.log('Largo de la imagen:', largoImg);
 
         // limites de la img
         this.imageBounds = {
@@ -96,47 +94,104 @@ export class NetKelGoogleMapsOverlay extends LitElement {
 
         // cargar la imagen como un overlay
         var overlay = new google.maps.GroundOverlay(
-          this.imageUrl,
+          this.overlayImageSourceUrl,
           this.imageBounds
         );
-        overlay.setMap(map);
+        overlay.setMap(this.map);
 
-        // pin en el centro
+        // pin
         this.marker = new google.maps.Marker({
             position: {lat: 0, lng: 0},
-            map: map,
+            map: this.map,
             draggable: true
         });
 
         // evento de arrastre de pin
-        this.marker.addListener('dragend', function(event) {
-            var centerLat = (this.imageBounds.north + this.imageBounds.south) / 2;
-            var centerLng = (this.imageBounds.east + this.imageBounds.west) / 2;
+        this.marker.addListener('dragend', (event: { latLng: any; }) => {
+            var newPosition = this.getPosition();
+
+            var newLat = newPosition.lat();
+            var newLng = newPosition.lng();
         
-            // calcular la distancia desde el centro hasta el borde en ambas direcciones
-            var distX = Math.abs(this.imageBounds.east - centerLng) + Math.abs(centerLng - this.imageBounds.west);
-            console.log(distX)
-            var distY = Math.abs(this.imageBounds.north - centerLat) + Math.abs(centerLat - this.imageBounds.south);
+            // Obtener los límites del mapa
+            var mapBounds = this.map.getBounds();
+            var maxLat = mapBounds.getNorthEast().lat(); 
+            var maxLng = mapBounds.getNorthEast().lng(); 
+            var minLat = mapBounds.getSouthWest().lat(); 
+            var minLng = mapBounds.getSouthWest().lng(); 
+
+            // verificar si la  posición está dentro de los límites del mapa
+            if (newLat > maxLat || newLat < minLat || newLng > maxLng || newLng < minLng) {
+                this.setPosition(this.initialPosition);
+            } else {
+                
+                this.initialPosition = newPosition;
+                
+                var coordenadas = {
+                    latitud: newLat,
+                    longitud: newLng
+                };
+                var coordenadasJSON = JSON.stringify(coordenadas);
+                
+                this.setPosition(coordenadasJSON);
+            }
+
+            // var centerLat = (this.imageBounds.north + this.imageBounds.south) / 2;
+            // var centerLng = (this.imageBounds.east + this.imageBounds.west) / 2;
+        
+            // // calcular la distancia desde el centro hasta el borde en ambas direcciones
+            // var distX = Math.abs(this.imageBounds.east - centerLng) + Math.abs(centerLng - this.imageBounds.west);
+            // console.log(distX)
+            // var distY = Math.abs(this.imageBounds.north - centerLat) + Math.abs(centerLat - this.imageBounds.south);
 
         
-            var projection = this.map.getProjection();
-            var pinPixel = projection.fromLatLngToPoint(event.latLng);
-            var centerPixel = projection.fromLatLngToPoint(new google.maps.LatLng(centerLat, centerLng));
-            var distPinX = pinPixel.x - centerPixel.x;
-            var distPinY = -(pinPixel.y - centerPixel.y);
+            // var projection = this.map.getProjection();
+            // var pinPixel = projection.fromLatLngToPoint(event.latLng);
+            // var centerPixel = projection.fromLatLngToPoint(new google.maps.LatLng(centerLat, centerLng));
+            // var distPinX = pinPixel.x - centerPixel.x;
+            // var distPinY = -(pinPixel.y - centerPixel.y);
 
         
-            // calcular las coordenadas normalizadas en el rango de -100 a 100
-            var coordX = (100 * distPinX) / distX;
-            var coordY = (100 * distPinY) / distY;
+            // // calcular las coordenadas normalizadas en el rango de -100 a 100
+            // var coordX = (100 * distPinX) / distX;
+            // var coordY = (100 * distPinY) / distY;
         
-            console.log("Coordenadas normalizadas:");
-            console.log("X:", coordX);
-            console.log("Y:", coordY);
+            // console.log("Coordenadas normalizadas:");
+            // console.log("X:", coordX);
+            // console.log("Y:", coordY);
         });
         
+
+        //  clic al marcador para mostrar InfoWindow
+        this.marker.addListener('click', () => {
+          var latlng = this.marker.getPosition();
+          var contentString = '<div><strong>Latitud:</strong> ' + latlng.lat().toFixed(6) + '<br>' +
+                              '<strong>Longitud:</strong> ' + latlng.lng().toFixed(6) + '</div>';
+         
+          if (this.infoWindow && this.infoWindow.getMap()) {
+            this.infoWindow.close();
+            
+            if (this.infoWindow.getPosition().equals(this.marker.getPosition())) {
+              return;
+            }
+          }
+          this.infoWindow = new google.maps.InfoWindow({
+            content: contentString,
+            anchor: new google.maps.Point(0, -40) 
+          });
+          this.infoWindow.open(this.map, this.marker);
+      });
     };
-    image.src = this.imageUrl;
+    image.src = this.overlayImageSourceUrl;
+  }
+
+  setPosition(coordenadasJSON: string) {
+    var coordenadasObjeto = JSON.parse(coordenadasJSON);
+    var latitud = coordenadasObjeto.latitud;
+    var longitud = coordenadasObjeto.longitud;
+    var nuevaPosicion = new google.maps.LatLng(latitud, longitud);
+
+    this.marker.setPosition(nuevaPosicion);
   }
 
 }
