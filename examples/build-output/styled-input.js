@@ -1,4 +1,4 @@
-import { _ as _decorate, s, i, e, x, a as e$1 } from './query-assigned-elements-f8b1b870.js';
+import { _ as _decorate, s, i, e, x, a as e$1 } from './query-assigned-elements-b2b5ede8.js';
 
 let NintexStyledInput = _decorate([e$1('form-plugin-styled-input')], function (_initialize, _LitElement) {
   class NintexStyledInput extends _LitElement {

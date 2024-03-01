@@ -1,4 +1,4 @@
-import { i, _ as _decorate, s, e, x, a as e$1 } from './query-assigned-elements-f8b1b870.js';
+import { i, _ as _decorate, s, e, x, b as _get, c as _getPrototypeOf, a as e$1 } from './query-assigned-elements-b2b5ede8.js';
 import { i as i$1 } from './query-970c10e5.js';
 
 const baseStyle = i`
@@ -132,9 +132,27 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
       kind: "method",
       key: "firstUpdated",
       value: function firstUpdated() {
-        // Load the Google Maps API
+        // // Load the Google Maps API
+        // const script = document.createElement('script');
+        // script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=initMap`;
+      }
+    }, {
+      kind: "method",
+      key: "connectedCallback",
+      value: function connectedCallback() {
+        _get(_getPrototypeOf(NetKelGoogleMapsOverlay.prototype), "connectedCallback", this).call(this);
+
+        // Load the Google Maps API script
         const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=initMap`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=googleMapsCallback`;
+        script.defer = true;
+        script.async = true;
+
+        // Attach the script to the document
+        document.head.appendChild(script);
+
+        // Define the callback function globally
+        window['googleMapsCallback'] = this.initMap.bind(this);
       }
     }, {
       kind: "method",

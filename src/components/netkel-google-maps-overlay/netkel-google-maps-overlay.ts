@@ -56,10 +56,27 @@ export class NetKelGoogleMapsOverlay extends LitElement {
   }
 
   firstUpdated() {
-      // Load the Google Maps API
-      const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=initMap`;
+      // // Load the Google Maps API
+      // const script = document.createElement('script');
+      // script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=initMap`;
   }
+  
+  connectedCallback() {
+    super.connectedCallback();
+
+    // Load the Google Maps API script
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=googleMapsCallback`;
+    script.defer = true;
+    script.async = true;
+    
+    // Attach the script to the document
+    document.head.appendChild(script);
+
+    // Define the callback function globally
+    window['googleMapsCallback'] = this.initMap.bind(this);
+  }
+
 
   initMap() {
     var image = new Image();
