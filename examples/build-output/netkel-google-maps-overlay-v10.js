@@ -143,7 +143,7 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
         // Load the Google Maps API script only if it hasn't been loaded
         if (!this.mapInitialized) {
           const script = document.createElement('script');
-          script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=initMap`;
+          script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=googleMapsCallback`;
           script.defer = true;
           script.async = true;
           document.head.appendChild(script);
@@ -151,9 +151,6 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
           // Set the flag to true to prevent reloading the script
           this.mapInitialized = true;
         }
-
-        // Dynamically bind the event listener
-        this.addEventListener('initMap', this.initMap.bind(this));
       }
     }, {
       kind: "method",
@@ -289,5 +286,13 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
     }]
   };
 }, s);
+
+// Define the callback function globally
+window.googleMapsCallback = () => {
+  const component = document.querySelector('netkel-google-maps-overlay');
+  if (component) {
+    component.initMap();
+  }
+};
 
 export { NetKelGoogleMapsOverlay };

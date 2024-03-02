@@ -65,7 +65,7 @@ export class NetKelGoogleMapsOverlay extends LitElement {
     // Load the Google Maps API script only if it hasn't been loaded
     if (!this.mapInitialized) {
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=initMap`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=googleMapsCallback`;
       script.defer = true;
       script.async = true;
       
@@ -74,11 +74,8 @@ export class NetKelGoogleMapsOverlay extends LitElement {
       // Set the flag to true to prevent reloading the script
       this.mapInitialized = true;
     }
-    
-    // Dynamically bind the event listener
-    this.addEventListener('initMap', this.initMap.bind(this));
   }
-
+  
   initMap() {
     if (this.mapInitialized) {
       var image = new Image();
@@ -215,3 +212,11 @@ export class NetKelGoogleMapsOverlay extends LitElement {
   }
 
 }
+
+// Define the callback function globally
+(window as any).googleMapsCallback = () => {
+  const component = document.querySelector('netkel-google-maps-overlay') as NetKelGoogleMapsOverlay;
+  if (component) {
+    component.initMap();
+  }
+};
