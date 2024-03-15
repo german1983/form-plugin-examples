@@ -148,7 +148,7 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
       static: true,
       key: "getMetaConfig",
       value: function getMetaConfig() {
-        return import('./netkel-google-maps-overlay.config-4bf56d54.js').then(({
+        return import('./netkel-google-maps-overlay.config-41688648.js').then(({
           config
         }) => {
           return config;
