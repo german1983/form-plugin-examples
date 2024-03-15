@@ -166,14 +166,14 @@ export class NetKelGoogleMapsOverlay extends LitElement {
         });
         this.marker.addListener('dragstart', () =>{
             // Cerrar el InfoWindow si está abierto
-            if (this.infoWindow && this.infoWindow.getMap()) {
+            if (this.infoWindow !== null) {
               this.infoWindow.close();
             }
         });
 
         // evento de arrastre de pin
         this.marker.addListener('dragend', (event: any) => {
-          var newPosition = this.getPosition();
+          var newPosition = this.marker.getPosition();
           var newLat = newPosition.lat();
           var newLng = newPosition.lng();
 
@@ -226,7 +226,7 @@ export class NetKelGoogleMapsOverlay extends LitElement {
                                 `<div><strong>Título:</strong> ${this.title}<br>` +         
                                 `<strong>Descripción:</strong> ${this.description}</div>`;
       
-          if (this.infoWindow && this.infoWindow.getMap() && this.infoWindow.getPosition().equals(this.marker.getPosition())) {
+          if (this.infoWindow && this.infoWindow.getPosition().equals(this.marker.getPosition())) {
               return this.infoWindow.close();
           }
       

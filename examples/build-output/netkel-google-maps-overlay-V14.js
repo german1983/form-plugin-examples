@@ -288,14 +288,14 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
             });
             this.marker.addListener('dragstart', () => {
               // Cerrar el InfoWindow si está abierto
-              if (this.infoWindow && this.infoWindow.getMap()) {
+              if (this.infoWindow !== null) {
                 this.infoWindow.close();
               }
             });
 
             // evento de arrastre de pin
             this.marker.addListener('dragend', event => {
-              var newPosition = this.getPosition();
+              var newPosition = this.marker.getPosition();
               var newLat = newPosition.lat();
               var newLng = newPosition.lng();
 
@@ -338,7 +338,7 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
             this.marker.addListener('click', () => {
               const latlng = this.marker.getPosition();
               const contentString = `<div><strong>Latitud:</strong> ${latlng.lat().toFixed(6)}<br>` + `<strong>Longitud:</strong> ${latlng.lng().toFixed(6)}</div>` + `<div><strong>Título:</strong> ${this.title}<br>` + `<strong>Descripción:</strong> ${this.description}</div>`;
-              if (this.infoWindow && this.infoWindow.getMap() && this.infoWindow.getPosition().equals(this.marker.getPosition())) {
+              if (this.infoWindow && this.infoWindow.getPosition().equals(this.marker.getPosition())) {
                 return this.infoWindow.close();
               }
               let altura = 10;
