@@ -1,6 +1,7 @@
 import { LitElement, html } from "lit";
 import { customElement, property, query } from 'lit/decorators.js';
 import { styles } from './netkel-google-maps-overlay.styles';
+import { TextField } from "@material/mwc-textfield/mwc-textfield.js";
 
 @customElement('netkel-google-maps-overlay')
 export class NetKelGoogleMapsOverlay extends LitElement {
@@ -54,7 +55,13 @@ export class NetKelGoogleMapsOverlay extends LitElement {
       <p><strong>Title: </strong> ${this.title}</p>
       <p><strong>Description:</strong> ${this.description}</p>
       <p><strong>ApiKey:</strong> ${this.apiKey}</p>
-    </div>`;
+    </div>
+    <mwc-textfield
+      id="textfield"
+      .label="${this.title}"
+      .helper="${this.description}"
+      @change="${() => this.onChange()}"
+    ></mwc-textfield>`;
   }
 
   firstUpdated() {
@@ -283,6 +290,17 @@ export class NetKelGoogleMapsOverlay extends LitElement {
 
     this.marker.setPosition(nuevaPosicion);
     console.log(eventoJSON);
+
+    const args = {
+      bubbles: true,
+      cancelable: false,
+      composed: true,
+      eventoJSON,
+    };
+
+    const el = this.shadowRoot?.getElementById('textfield') as TextField;
+    const event = new CustomEvent('ntx-value-change', args);
+    el.dispatchEvent(event);
   }
 }
 
