@@ -13,10 +13,16 @@ export class NetKelGoogleMapsOverlay extends LitElement {
   overlayImageSourceUrl = '';
 
   @property({ type: String })
-  pinCoordinates = '';
+  title = '';
 
   @property({ type: String })
-  pinName = '';
+  description = '';
+
+  @property({ type: Number })
+  latitude = 0.0;
+
+  @property({ type: Number })
+  longitude = 0.0;
 
   map: any = null;
 
@@ -40,17 +46,15 @@ export class NetKelGoogleMapsOverlay extends LitElement {
   render() {
     // this.initMap();
 
-    return html` <div id="map-container">
+    return html`
+    <div id="map-container">
         <div id="map"></div>
-        <div id="map-init">
-          <span>This is the apiKey configured:<strong>${this.apiKey}</strong></span>
-          <ul>
-            <li>Overlay Image Source URL: <strong>${this.overlayImageSourceUrl}</strong></li>
-            <li>Pin Coordinates: <strong>${this.pinCoordinates}</strong></li>
-            <li>Pin Name: <strong>${this.pinName}</strong></li>
-          </ul>
-          </div>
-        </div>`;
+    </div>
+    <div id="info-box">
+      <p><strong>Title: </strong> ${this.title}</p>
+      <p><strong>Description:</strong> ${this.description}</p>
+      <p><strong>ApiKey:</strong> ${this.apiKey}</p>
+    </div>`;
   }
 
   firstUpdated() {
@@ -80,137 +84,217 @@ export class NetKelGoogleMapsOverlay extends LitElement {
     if (this.mapInitialized) {
       var image = new Image();
       image.onload = () => {
-          var anchoImg = image.width;
-          var largoImg = image.height;
+        var anchoImg = 840;
+        var proporcion = anchoImg / image.width;
+        var newlargo = image.height * proporcion;
+        var largoImg = newlargo;
+        var centerImg = 0;
 
-          // limites de la img
-          this.imageBounds = {
-              north: largoImg / 2,
-              south: -largoImg / 2,
-              east: anchoImg / 2,
-              west: -anchoImg / 2
-          };
+        // Calcular las extensiones de latitud y longitud para la imagen
+        const latExt = largoImg * 0.01;
+        const lngExt = anchoImg * 0.01;
 
-          const mapElement = (this.shadowRoot?.getElementById('map') as HTMLElement);
-          // ajustar mapa en html al tamaño de la imagen
-          mapElement!.style.width = anchoImg + 'px';
-          mapElement!.style.height = largoImg + 'px';
+        // limites de la img
+        this.imageBounds = {
+          north:  {
+            lat: centerImg + (latExt / 2),
+            long: centerImg
+          } ,
+          south: {
+            lat: centerImg - (latExt / 2),
+            long: centerImg
+          },
+          east: {
+            lat: centerImg,
+            long: centerImg + (lngExt / 2)
+          },
+          west: {
+            lat: centerImg,
+            long: centerImg - (lngExt / 2)
+          }
+        };
 
-          //  mapa
-          this.map = new google.maps.Map(mapElement, {
-              center: {lat: 0, lng: 0},
-              zoom: 2,
-              streetViewControl: false,
-              mapTypeControl: false,
-              fullscreenControl: false,
-              draggable: false,
-              zoomControl: false,
-              gestureHandling: 'none'
-          });
+        const mapContainerElement = (this.shadowRoot?.getElementById('map-container') as HTMLElement);
+        const mapElement = (this.shadowRoot?.getElementById('map') as HTMLElement);
+        
+        // ajustar mapa en html al tamaño de la imagen
+        mapContainerElement.style.width = anchoImg + 'px';
+        mapContainerElement.style.height = largoImg + 'px';
+        mapElement.style.width = anchoImg + 'px';
+        mapElement.style.height = largoImg + 'px';
 
-          // cargar la imagen como un overlay
-          var overlay = new google.maps.GroundOverlay(
-            this.overlayImageSourceUrl,
-            this.imageBounds
-          );
-          overlay.setMap(this.map);
+        // Definir las coordenadas de las esquinas de la imagen
+        var bounds = {
+          north: this.imageBounds.north.lat,
+          south: this.imageBounds.south.lat,
+          east: this.imageBounds.east.long,
+          west: this.imageBounds.west.long
+        };
 
-          // pin
-          this.marker = new google.maps.Marker({
-              position: {lat: 0, lng: 0},
-              map: this.map,
-              draggable: true
-          });
-
-          // evento de arrastre de pin
-          this.marker.addListener('dragend', (event: { latLng: any; }) => {
-              var newPosition = this.getPosition();
-
-              var newLat = newPosition.lat();
-              var newLng = newPosition.lng();
+        //  mapa
+        this.map = new google.maps.Map(mapElement, {
+          center: {lat: 0, lng: 0},
+          zoom: 0,
+          streetViewControl: false,
+          mapTypeControl: false,
+          fullscreenControl: false,
+          draggable: false,
+          gestureHandling: 'none',
+          keyboardShortcuts: false,
+          zoomControl: false,
+          restriction: {
+              latLngBounds: bounds,
+            }
+        });
           
-              // Obtener los límites del mapa
-              var mapBounds = this.map.getBounds();
-              var maxLat = mapBounds.getNorthEast().lat(); 
-              var maxLng = mapBounds.getNorthEast().lng(); 
-              var minLat = mapBounds.getSouthWest().lat(); 
-              var minLng = mapBounds.getSouthWest().lng(); 
+        // Cargar la imagen como un overlay
+        var overlay = new google.maps.GroundOverlay(
+          this.overlayImageSourceUrl,
+          bounds
+        );
+        overlay.setMap(this.map);
 
-              // verificar si la  posición está dentro de los límites del mapa
-              if (newLat > maxLat || newLat < minLat || newLng > maxLng || newLng < minLng) {
-                  this.setPosition(this.initialPosition);
-              } else {
-                  
-                  this.initialPosition = newPosition;
-                  
-                  var coordenadas = {
-                      latitud: newLat,
-                      longitud: newLng
-                  };
-                  var coordenadasJSON = JSON.stringify(coordenadas);
-                  
-                  this.setPosition(coordenadasJSON);
-              }
 
-              // var centerLat = (this.imageBounds.north + this.imageBounds.south) / 2;
-              // var centerLng = (this.imageBounds.east + this.imageBounds.west) / 2;
-          
-              // // calcular la distancia desde el centro hasta el borde en ambas direcciones
-              // var distX = Math.abs(this.imageBounds.east - centerLng) + Math.abs(centerLng - this.imageBounds.west);
-              // console.log(distX)
-              // var distY = Math.abs(this.imageBounds.north - centerLat) + Math.abs(centerLat - this.imageBounds.south);
-
-          
-              // var projection = this.map.getProjection();
-              // var pinPixel = projection.fromLatLngToPoint(event.latLng);
-              // var centerPixel = projection.fromLatLngToPoint(new google.maps.LatLng(centerLat, centerLng));
-              // var distPinX = pinPixel.x - centerPixel.x;
-              // var distPinY = -(pinPixel.y - centerPixel.y);
-
-          
-              // // calcular las coordenadas normalizadas en el rango de -100 a 100
-              // var coordX = (100 * distPinX) / distX;
-              // var coordY = (100 * distPinY) / distY;
-          
-              // console.log("Coordenadas normalizadas:");
-              // console.log("X:", coordX);
-              // console.log("Y:", coordY);
-          });
-          
-
-          //  clic al marcador para mostrar InfoWindow
-          this.marker.addListener('click', () => {
-            var latlng = this.marker.getPosition();
-            var contentString = '<div><strong>Latitud:</strong> ' + latlng.lat().toFixed(6) + '<br>' +
-                                '<strong>Longitud:</strong> ' + latlng.lng().toFixed(6) + '</div>';
-          
+        // pin
+        this.marker = new google.maps.Marker({
+          position: {lat: 0, lng: 0},
+          map: this.map,
+          draggable: true,
+          restriction: {
+            latLngBounds: bounds,
+            strictBounds: true
+          },
+        });
+        this.marker.addListener('dragstart', () =>{
+            // Cerrar el InfoWindow si está abierto
             if (this.infoWindow && this.infoWindow.getMap()) {
               this.infoWindow.close();
-              
-              if (this.infoWindow.getPosition().equals(this.marker.getPosition())) {
-                return;
-              }
             }
-            this.infoWindow = new google.maps.InfoWindow({
+        });
+
+        // evento de arrastre de pin
+        this.marker.addListener('dragend', (event: any) => {
+          var newPosition = this.getPosition();
+          var newLat = newPosition.lat();
+          var newLng = newPosition.lng();
+      
+          // // obtener los límites del mapa
+          // var mapBounds = this.map.getBounds();
+          // var maxLat = mapBounds.getNorthEast().lat(); // Latitud máxima
+          // var maxLng = mapBounds.getNorthEast().lng(); // Longitud máxima
+          // var minLat = mapBounds.getSouthWest().lat(); // Latitud mínima
+          // var minLng = mapBounds.getSouthWest().lng(); // Longitud mínima
+    
+            // Verificar si la nueva posición está dentro de los límites de la imagen
+          if (newLat > bounds.north || newLat < bounds.south || 
+              newLng > bounds.east || newLng < bounds.west) {
+              // Si la nueva posición está fuera de los límites, restablecer la posición a la inicial
+              this.setPosition(this.latitude, this.longitude);
+          } else {
+              // guardar posicion 
+              this.latitude = newLat;
+              this.longitude = newLng;
+
+              // Convertir las coordenadas a JSON y actualizar la posición
+              var coordenadas = {
+                  latitud: newLat,
+                  longitud: newLng
+              };
+              var coordenadasJSON = JSON.stringify(coordenadas);
+              
+              console.log(coordenadasJSON);
+              this.setPosition(this.latitude, this.longitude);
+          }
+        });
+
+        google.maps.event.addListener(this.map, 'bounds_changed', () => {
+          var overlayBounds = overlay.getBounds();
+          var mapBounds = this.map.getBounds();
+          if (!overlayBounds || !mapBounds) return;
+
+          var maxLat = overlayBounds.getNorthEast().lat();
+          var minLat = overlayBounds.getSouthWest().lat();
+          var maxLng = overlayBounds.getNorthEast().lng();
+          var minLng = overlayBounds.getSouthWest().lng();
+
+          var pinPosition = this.marker.getPosition();
+          var pinLat = pinPosition.lat();
+          var pinLng = pinPosition.lng();
+
+          if (pinLat > maxLat || pinLat < minLat || pinLng > maxLng || pinLng < minLng) {
+            this.marker.setPosition(this.marker.initialPosition);
+          }
+        });
+        
+        
+        // evento clic al marcador para mostrar InfoWindow
+        this.marker.addListener('click', () => {
+          const latlng = this.marker.getPosition();
+          const contentString = `<div><strong>Latitud:</strong> ${latlng.lat().toFixed(6)}<br>` +
+                                `<strong>Longitud:</strong> ${latlng.lng().toFixed(6)}</div>` + 
+                                `<div><strong>Título:</strong> ${this.title}<br>` +         
+                                `<strong>Descripción:</strong> ${this.description}</div>`;
+      
+          if (this.infoWindow && this.infoWindow.getMap() && this.infoWindow.getPosition().equals(this.marker.getPosition())) {
+              return this.infoWindow.close();
+          }
+      
+          let altura = 10;
+          let ancho = 0;
+          const pinPosition = this.marker.getPosition();
+          const pinLat = pinPosition.lat();
+          const pinLng = pinPosition.lng();
+      
+          if (pinLat > 1.35) {
+              altura = 150;
+          }
+      
+          if (pinLng < -2.75) {
+              ancho = 125;
+          } else if (pinLng > 2.25) {
+              ancho = -125;
+          }
+      
+          console.log(pinLng);
+      
+          this.infoWindow = new google.maps.InfoWindow({
               content: contentString,
-              anchor: new google.maps.Point(0, -40) 
-            });
-            this.infoWindow.open(this.map, this.marker);
+              pixelOffset: new google.maps.Size(ancho, altura),
+              ariaLabel: "Titulo", 
+              ariaLabel: "Descripción",
+          });
+      
+          this.infoWindow.open(this.map, this.marker);
         });
       };
       image.src = this.overlayImageSourceUrl;
     }
   }
-
-  setPosition(coordenadasJSON: string) {
+  
+  setPositionFromObject(coordenadasJSON: string) {
     var coordenadasObjeto = JSON.parse(coordenadasJSON);
     var latitud = coordenadasObjeto.latitud;
     var longitud = coordenadasObjeto.longitud;
+    this.setAttribute(latitud, longitud);
+  }
+  
+  setPosition(latitud: number, longitud: number) {
     var nuevaPosicion = new google.maps.LatLng(latitud, longitud);
 
-    this.marker.setPosition(nuevaPosicion);
-  }
+    // Crear el evento con todas las propiedades
+    var evento = {
+        latitud: latitud,
+        longitud: longitud,
+        titulo: this.title,
+        descripcion: this.description
+    };
 
+    // Serializar el evento a JSON
+    var eventoJSON = JSON.stringify(evento);
+
+    this.marker.setPosition(nuevaPosicion);
+    console.log(eventoJSON);
+  }
 }
 
 // Define the callback function globally
