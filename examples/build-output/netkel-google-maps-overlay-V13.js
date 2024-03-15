@@ -299,13 +299,6 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
               var newLat = newPosition.lat();
               var newLng = newPosition.lng();
 
-              // // obtener los límites del mapa
-              // var mapBounds = this.map.getBounds();
-              // var maxLat = mapBounds.getNorthEast().lat(); // Latitud máxima
-              // var maxLng = mapBounds.getNorthEast().lng(); // Longitud máxima
-              // var minLat = mapBounds.getSouthWest().lat(); // Latitud mínima
-              // var minLng = mapBounds.getSouthWest().lng(); // Longitud mínima
-
               // Verificar si la nueva posición está dentro de los límites de la imagen
               if (newLat > bounds.north || newLat < bounds.south || newLng > bounds.east || newLng < bounds.west) {
                 // Si la nueva posición está fuera de los límites, restablecer la posición a la inicial
@@ -364,9 +357,7 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
               console.log(pinLng);
               this.infoWindow = new google.maps.InfoWindow({
                 content: contentString,
-                pixelOffset: new google.maps.Size(ancho, altura),
-                ariaLabel: "Titulo",
-                ariaLabel: "Descripción"
+                pixelOffset: new google.maps.Size(ancho, altura)
               });
               this.infoWindow.open(this.map, this.marker);
             });
@@ -381,7 +372,7 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
         var coordenadasObjeto = JSON.parse(coordenadasJSON);
         var latitud = coordenadasObjeto.latitud;
         var longitud = coordenadasObjeto.longitud;
-        this.setAttribute(latitud, longitud);
+        this.setPosition(latitud, longitud);
       }
     }, {
       kind: "method",

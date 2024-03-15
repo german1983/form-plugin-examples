@@ -154,7 +154,6 @@ export class NetKelGoogleMapsOverlay extends LitElement {
         );
         overlay.setMap(this.map);
 
-
         // pin
         this.marker = new google.maps.Marker({
           position: {lat: 0, lng: 0},
@@ -177,15 +176,8 @@ export class NetKelGoogleMapsOverlay extends LitElement {
           var newPosition = this.getPosition();
           var newLat = newPosition.lat();
           var newLng = newPosition.lng();
-      
-          // // obtener los límites del mapa
-          // var mapBounds = this.map.getBounds();
-          // var maxLat = mapBounds.getNorthEast().lat(); // Latitud máxima
-          // var maxLng = mapBounds.getNorthEast().lng(); // Longitud máxima
-          // var minLat = mapBounds.getSouthWest().lat(); // Latitud mínima
-          // var minLng = mapBounds.getSouthWest().lng(); // Longitud mínima
-    
-            // Verificar si la nueva posición está dentro de los límites de la imagen
+
+          // Verificar si la nueva posición está dentro de los límites de la imagen
           if (newLat > bounds.north || newLat < bounds.south || 
               newLng > bounds.east || newLng < bounds.west) {
               // Si la nueva posición está fuera de los límites, restablecer la posición a la inicial
@@ -226,7 +218,6 @@ export class NetKelGoogleMapsOverlay extends LitElement {
           }
         });
         
-        
         // evento clic al marcador para mostrar InfoWindow
         this.marker.addListener('click', () => {
           const latlng = this.marker.getPosition();
@@ -259,9 +250,7 @@ export class NetKelGoogleMapsOverlay extends LitElement {
       
           this.infoWindow = new google.maps.InfoWindow({
               content: contentString,
-              pixelOffset: new google.maps.Size(ancho, altura),
-              ariaLabel: "Titulo", 
-              ariaLabel: "Descripción",
+              pixelOffset: new google.maps.Size(ancho, altura)
           });
       
           this.infoWindow.open(this.map, this.marker);
@@ -275,7 +264,7 @@ export class NetKelGoogleMapsOverlay extends LitElement {
     var coordenadasObjeto = JSON.parse(coordenadasJSON);
     var latitud = coordenadasObjeto.latitud;
     var longitud = coordenadasObjeto.longitud;
-    this.setAttribute(latitud, longitud);
+    this.setPosition(latitud, longitud);
   }
   
   setPosition(latitud: number, longitud: number) {
