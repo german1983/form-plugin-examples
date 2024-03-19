@@ -164,8 +164,8 @@ export class NetKelGoogleMapsOverlay extends LitElement {
         // pin
         this.marker = new google.maps.Marker({
           position: {
-            lat: this.latitude,
-            lng: this.longitude
+            lat: 0,
+            lng: 0
           },
           map: this.map,
           draggable: true,
@@ -265,6 +265,8 @@ export class NetKelGoogleMapsOverlay extends LitElement {
       
           this.infoWindow.open(this.map, this.marker);
         });
+
+        this.setPosition(this.latitude, this.longitude);
       };
       image.src = this.overlayImageSourceUrl;
     }

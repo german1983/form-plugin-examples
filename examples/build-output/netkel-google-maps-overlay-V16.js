@@ -282,8 +282,8 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
             // pin
             this.marker = new google.maps.Marker({
               position: {
-                lat: this.latitude,
-                lng: this.longitude
+                lat: 0,
+                lng: 0
               },
               map: this.map,
               draggable: true,
@@ -367,6 +367,7 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
               });
               this.infoWindow.open(this.map, this.marker);
             });
+            this.setPosition(this.latitude, this.longitude);
           };
           image.src = this.overlayImageSourceUrl;
         }
