@@ -148,7 +148,7 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
       static: true,
       key: "getMetaConfig",
       value: function getMetaConfig() {
-        return import('./netkel-google-maps-overlay.config-b26be1ea.js').then(({
+        return import('./netkel-google-maps-overlay.config-cf64b51b.js').then(({
           config
         }) => {
           return config;
@@ -385,7 +385,6 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
       kind: "method",
       key: "setPosition",
       value: function setPosition(latitud, longitud) {
-        var _this$shadowRoot3;
         var nuevaPosicion = new google.maps.LatLng(latitud, longitud);
 
         // Crear el evento con todas las propiedades
@@ -404,11 +403,10 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
           bubbles: true,
           cancelable: false,
           composed: true,
-          eventoJSON
+          detail: eventoJSON
         };
-        const el = (_this$shadowRoot3 = this.shadowRoot) === null || _this$shadowRoot3 === void 0 ? void 0 : _this$shadowRoot3.getElementById('textfield');
         const event = new CustomEvent('ntx-value-change', args);
-        el.dispatchEvent(event);
+        this.dispatchEvent(event);
       }
     }]
   };

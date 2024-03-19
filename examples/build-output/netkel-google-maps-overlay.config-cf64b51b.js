@@ -34,8 +34,15 @@ const config = {
       type: 'number',
       title: 'Longitude',
       description: 'The longitude of the object represented by the PIN on the map.'
+    },
+    value: {
+      type: 'string',
+      title: 'Value',
+      isValueField: true,
+      description: 'The new Latitud and Longitude of the object in JSON format.'
     }
-  }
+  },
+  events: ["ntx-value-change"]
 };
 
 export { config };

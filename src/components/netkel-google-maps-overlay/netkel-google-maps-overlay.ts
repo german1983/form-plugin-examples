@@ -300,12 +300,11 @@ export class NetKelGoogleMapsOverlay extends LitElement {
       bubbles: true,
       cancelable: false,
       composed: true,
-      eventoJSON,
+      detail: eventoJSON,
     };
 
-    const el = this.shadowRoot?.getElementById('textfield') as TextField;
     const event = new CustomEvent('ntx-value-change', args);
-    el.dispatchEvent(event);
+    this.dispatchEvent(event);
   }
 }
 
