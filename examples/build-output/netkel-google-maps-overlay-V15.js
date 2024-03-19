@@ -168,7 +168,13 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
       <p><strong>Title: </strong> ${this.title}</p>
       <p><strong>Description:</strong> ${this.description}</p>
       <p><strong>ApiKey:</strong> ${this.apiKey}</p>
-    </div>`;
+    </div>
+    <mwc-textfield
+      id="textfield"
+      .label="${this.title}"
+      .helper="${this.description}"
+      @change="${() => this.onChange()}"
+    ></mwc-textfield>`;
       }
     }, {
       kind: "method",
@@ -276,8 +282,8 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
             // pin
             this.marker = new google.maps.Marker({
               position: {
-                lat: 0,
-                lng: 0
+                lat: this.latitude,
+                lng: this.longitude
               },
               map: this.map,
               draggable: true,
@@ -378,6 +384,7 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
       kind: "method",
       key: "setPosition",
       value: function setPosition(latitud, longitud) {
+        var _this$shadowRoot3;
         var nuevaPosicion = new google.maps.LatLng(latitud, longitud);
 
         // Crear el evento con todas las propiedades
@@ -392,6 +399,15 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
         var eventoJSON = JSON.stringify(evento);
         this.marker.setPosition(nuevaPosicion);
         console.log(eventoJSON);
+        const args = {
+          bubbles: true,
+          cancelable: false,
+          composed: true,
+          eventoJSON
+        };
+        const el = (_this$shadowRoot3 = this.shadowRoot) === null || _this$shadowRoot3 === void 0 ? void 0 : _this$shadowRoot3.getElementById('textfield');
+        const event = new CustomEvent('ntx-value-change', args);
+        el.dispatchEvent(event);
       }
     }]
   };

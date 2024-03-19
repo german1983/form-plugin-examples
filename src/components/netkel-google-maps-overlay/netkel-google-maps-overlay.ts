@@ -163,7 +163,10 @@ export class NetKelGoogleMapsOverlay extends LitElement {
 
         // pin
         this.marker = new google.maps.Marker({
-          position: {lat: 0, lng: 0},
+          position: {
+            lat: this.latitude,
+            lng: this.longitude
+          },
           map: this.map,
           draggable: true,
           restriction: {
