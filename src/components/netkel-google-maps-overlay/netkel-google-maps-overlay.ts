@@ -140,16 +140,16 @@ export class NetKelGoogleMapsOverlay extends LitElement {
             }
         });
 
-        map.mapTypes.set('custom_map', new google.maps.ImageMapType({
-          getTileUrl: function(coord, zoom) {
-              return null; // Retornar null para no cargar ninguna imagen de fondo
+        this.map.mapTypes.set('custom_map', new google.maps.ImageMapType({
+          getTileUrl: (coord, zoom) => {
+              return ""; // Retornar null para no cargar ninguna imagen de fondo
           },
           tileSize: new google.maps.Size(256, 256),
           name: 'Custom Map',
           maxZoom: 19
         }));
 
-        map.setOptions({styles: [
+        this.map.setOptions({styles: [
           {
               featureType: 'all',
               elementType: 'labels',
