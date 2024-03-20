@@ -267,6 +267,7 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
               mapTypeControl: false,
               fullscreenControl: false,
               draggable: false,
+              mapTypeId: 'custom_map',
               gestureHandling: 'none',
               keyboardShortcuts: false,
               zoomControl: false,
@@ -274,6 +275,47 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
                 latLngBounds: bounds
               }
             });
+
+            map.mapTypes.set('custom_map', new google.maps.ImageMapType({
+          getTileUrl: function(coord, zoom) {
+              return null; // Retornar null para no cargar ninguna imagen de fondo
+          },
+          tileSize: new google.maps.Size(256, 256),
+          name: 'Custom Map',
+          maxZoom: 19
+        }));
+
+        map.setOptions({styles: [
+          {
+              featureType: 'all',
+              elementType: 'labels',
+              stylers: [{visibility: 'off'}] // Ocultar todas las caracteristicas del mapa 
+          },
+          {
+              featureType: 'all',
+              stylers: [{visibility: 'off'}] 
+          },
+          {
+              featureType: 'landscape',
+              elementType: 'geometry',
+              stylers: [{visibility: 'off'}] 
+          },
+          {
+              featureType: 'road',
+              elementType: 'geometry',
+              stylers: [{visibility: 'off'}] 
+          },
+          {
+              featureType: 'administrative',
+              elementType: 'geometry',
+              stylers: [{visibility: 'off'}] 
+          },
+          {
+              featureType: 'water',
+              elementType: 'geometry',
+              stylers: [{visibility: 'off'}] 
+          }
+        ]});
 
             // Cargar la imagen como un overlay
             var overlay = new google.maps.GroundOverlay(this.overlayImageSourceUrl, bounds);
