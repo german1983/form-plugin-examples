@@ -14,6 +14,7 @@ const baseStyle = i`
       margin: 0px;
   }
 
+
   #info-box {
     background-color: #CDC9C8;
     width: 810px;
