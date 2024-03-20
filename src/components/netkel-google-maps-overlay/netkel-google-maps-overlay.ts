@@ -1,7 +1,6 @@
 import { LitElement, html } from "lit";
 import { customElement, property, query } from 'lit/decorators.js';
 import { styles } from './netkel-google-maps-overlay.styles';
-import { TextField } from "@material/mwc-textfield/mwc-textfield.js";
 
 @customElement('netkel-google-maps-overlay')
 export class NetKelGoogleMapsOverlay extends LitElement {
@@ -45,8 +44,6 @@ export class NetKelGoogleMapsOverlay extends LitElement {
   }
 
   render() {
-    // this.initMap();
-
     return html`
     <div id="map-container">
         <div id="map"></div>
@@ -55,19 +52,7 @@ export class NetKelGoogleMapsOverlay extends LitElement {
       <p><strong>Title: </strong> ${this.title}</p>
       <p><strong>Description:</strong> ${this.description}</p>
       <p><strong>ApiKey:</strong> ${this.apiKey}</p>
-    </div>
-    <mwc-textfield
-      id="textfield"
-      .label="${this.title}"
-      .helper="${this.description}"
-      @change="${() => this.onChange()}"
-    ></mwc-textfield>`;
-  }
-
-  firstUpdated() {
-      // // Load the Google Maps API
-      // const script = document.createElement('script');
-      // script.src = `https://maps.googleapis.com/maps/api/js?key=${this.apiKey}&callback=initMap`;
+    </div>`;
   }
   
   connectedCallback() {
@@ -270,13 +255,6 @@ export class NetKelGoogleMapsOverlay extends LitElement {
       };
       image.src = this.overlayImageSourceUrl;
     }
-  }
-  
-  setPositionFromObject(coordenadasJSON: string) {
-    var coordenadasObjeto = JSON.parse(coordenadasJSON);
-    var latitud = coordenadasObjeto.latitud;
-    var longitud = coordenadasObjeto.longitud;
-    this.setPosition(latitud, longitud);
   }
   
   setPosition(latitud: number, longitud: number) {

@@ -1,12 +1,6 @@
 import { css } from "lit";
 
 const baseStyle = css`
-
-  #map {
-      height: 500px;
-      width: 100%;
-      margin: 0
-  }
   #map {
       height: auto;
       width: 840px;
@@ -22,8 +16,6 @@ const baseStyle = css`
     font-family: 'Open Sans';
     padding: 10px;
     padding-left: 20px;
-    
-    
   }
 
   .gm-style-iw-tc {
