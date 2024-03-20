@@ -47,11 +47,6 @@ export class NetKelGoogleMapsOverlay extends LitElement {
     return html`
     <div id="map-container">
         <div id="map"></div>
-    </div>
-    <div id="info-box">
-      <p><strong>Title: </strong> ${this.title}</p>
-      <p><strong>Description:</strong> ${this.description}</p>
-      <p><strong>ApiKey:</strong> ${this.apiKey}</p>
     </div>`;
   }
   
@@ -258,10 +253,10 @@ export class NetKelGoogleMapsOverlay extends LitElement {
         // evento clic al marcador para mostrar InfoWindow
         this.marker.addListener('click', () => {
           const latlng = this.marker.getPosition();
-          const contentString = `<div><strong>Latitud:</strong> ${latlng.lat().toFixed(6)}<br>` +
-                                `<strong>Longitud:</strong> ${latlng.lng().toFixed(6)}</div>` + 
-                                `<div><strong>Título:</strong> ${this.title}<br>` +         
-                                `<strong>Descripción:</strong> ${this.description}</div>`;
+          const contentString = `<div><strong>Latitude:</strong> ${latlng.lat().toFixed(6)}<br>` +
+                                `<strong>Longitude:</strong> ${latlng.lng().toFixed(6)}</div>` + 
+                                `<div><strong>Title:</strong> ${this.title}<br>` +         
+                                `<strong>Description:</strong> ${this.description}</div>`;
       
           if (this.infoWindow && this.infoWindow.getPosition().equals(this.marker.getPosition())) {
               return this.infoWindow.close();
@@ -305,9 +300,7 @@ export class NetKelGoogleMapsOverlay extends LitElement {
     // Crear el evento con todas las propiedades
     var evento = {
         latitud: latitud,
-        longitud: longitud,
-        titulo: this.title,
-        descripcion: this.description
+        longitud: longitud
     };
 
     // Serializar el evento a JSON
@@ -330,6 +323,7 @@ export class NetKelGoogleMapsOverlay extends LitElement {
 
 // Define the callback function globally
 (window as any).googleMapsCallback = () => {
+  debugger;
   const component = document.querySelector('netkel-google-maps-overlay') as NetKelGoogleMapsOverlay;
   if (component) {
     component.initMap();
