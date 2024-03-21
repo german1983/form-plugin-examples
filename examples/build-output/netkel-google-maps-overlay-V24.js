@@ -399,6 +399,8 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
       key: "setPosition",
       value: function setPosition(latitud, longitud) {
         var nuevaPosicion = new google.maps.LatLng(latitud, longitud);
+        this.latitude = latitud;
+        this.longitude = longitud;
 
         // Crear el evento con todas las propiedades
         var evento = {

@@ -299,7 +299,9 @@ export class NetKelGoogleMapsOverlay extends LitElement {
   
   setPosition(latitud: number, longitud: number) {
     var nuevaPosicion = new google.maps.LatLng(latitud, longitud);
-
+    this.latitude = latitud;
+    this.longitude = longitud;
+    
     // Crear el evento con todas las propiedades
     var evento = {
         latitud: latitud,
