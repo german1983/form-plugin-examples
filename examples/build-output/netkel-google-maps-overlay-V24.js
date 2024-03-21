@@ -184,9 +184,17 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
           var image = new Image();
           image.onload = () => {
             var _this$shadowRoot, _this$shadowRoot2;
-            var anchoImg = 840;
+            defAnchoImg = image.width
+            defAltoImg = image.height
+            var resolucion = (defAltoImg/defAnchoImg)
+            var anchoImg = window.innerWidth    //se adapta al ancho de la ventana
+            if (anchoImg > image.width){
+                anchoImg = image.width
+            }      
+            var anchoImg = window.innerWidth    //se adapta al ancho de la ventana       
             var proporcion = anchoImg / image.width;
-            var newlargo = image.height * proporcion;
+            var newlargo = Math.min(image.height * proporcion, window.innerHeight);
+            anchoImg = (newlargo / resolucion)         
             var largoImg = newlargo;
             var centerImg = 0;
 
@@ -363,32 +371,64 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
             });
 
             // evento clic al marcador para mostrar InfoWindow
-            this.marker.addListener('click', () => {
-              const latlng = this.marker.getPosition();
-              const contentString = `<div><strong>Latitude:</strong> ${latlng.lat().toFixed(6)}<br>` + `<strong>Longitude:</strong> ${latlng.lng().toFixed(6)}</div>` + `<div><strong>Title:</strong> ${this.title}<br>` + `<strong>Description:</strong> ${this.description}</div>`;
-              if (this.infoWindow && this.infoWindow.getPosition().equals(this.marker.getPosition())) {
-                return this.infoWindow.close();
-              }
-              let altura = 10;
-              let ancho = 0;
-              const pinPosition = this.marker.getPosition();
-              const pinLat = pinPosition.lat();
-              const pinLng = pinPosition.lng();
-              if (pinLat > 1.35) {
-                altura = 150;
-              }
-              if (pinLng < -2.75) {
-                ancho = 125;
-              } else if (pinLng > 2.25) {
-                ancho = -125;
-              }
-              console.log(pinLng);
-              this.infoWindow = new google.maps.InfoWindow({
+            marker.addListener('click', function() {
+            const latlng = marker.getPosition();
+            const contentString = `<div><strong>Latitud:</strong> ${latlng.lat().toFixed(6)}<br>` +
+                                  `<strong>Longitud:</strong> ${latlng.lng().toFixed(6)}</div>` + 
+                                  `<div><strong>Título:</strong> ${titulo}<br>` +         
+                                  `<strong>Descripción:</strong> ${descripcion}</div>`;
+        
+            if (infoWindow && infoWindow.getMap() && infoWindow.getPosition().equals(marker.getPosition())) {
+                return infoWindow.close();
+            }
+        
+            let altura = 0;
+            let ancho = 0;
+            const pinPosition = marker.getPosition();
+            const pinLat = pinPosition.lat();
+            const pinLng = pinPosition.lng();
+        
+            // Obtener el tamaño del mapa
+            const mapContainer = document.getElementById('map-container');
+            const mapWidth = mapContainer.offsetWidth;
+            const mapHeight = mapContainer.offsetHeight;
+        
+            
+            let offsetX = 0;
+            let offsetY = 0;
+        
+            if (pinLat > 1.35) {
+                altura = 250;
+            }
+        
+            if (pinLng < -2.75) {
+                ancho = 25;
+            } else if (pinLng > 2.25) {
+                ancho = -25;
+            }
+        
+            // Ajustar la posición del InfoWindow si se sale del mapa
+            if (pinLat > 1.35) {
+                offsetY = Math.min(mapHeight / 2 - 100, -100);
+            } else if (pinLat < -1.35) {
+                //offsetY = Math.max(-(mapHeight / 2 - 100), 100);
+            }
+        
+            if (pinLng < -2.75) {
+                offsetX = Math.max(-(mapWidth / 2 - 100), 100);
+            } else if (pinLng > 2.25) {
+                offsetX = Math.min(mapWidth / 2 - 100, -100);
+            }
+        
+            infoWindow = new google.maps.InfoWindow({
                 content: contentString,
-                pixelOffset: new google.maps.Size(ancho, altura)
-              });
-              this.infoWindow.open(this.map, this.marker);
+                pixelOffset: new google.maps.Size(ancho + offsetX, altura + offsetY),
+                ariaLabel: "Titulo", 
+                ariaLabel: "Descripción",
             });
+        
+            infoWindow.open(map, marker);
+        });
             this.setPosition(this.latitude, this.longitude);
           };
           image.src = this.overlayImageSourceUrl;
