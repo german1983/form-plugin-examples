@@ -44,6 +44,9 @@ export class NetKelGoogleMapsOverlay extends LitElement {
   }
 
   render() {
+    if(this.apiKey === '' || this.overlayImageSourceUrl === '') {
+      return html`<div>Google Maps API Key and Overlay Image Source URL are required</div>`;
+    }
     return html`
     <div id="map-container">
         <div id="map"></div>

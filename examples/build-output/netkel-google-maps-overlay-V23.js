@@ -150,6 +150,9 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
       kind: "method",
       key: "render",
       value: function render() {
+        if (this.apiKey === '' || this.overlayImageSourceUrl === '') {
+          return x`<div>Google Maps API Key and Overlay Image Source URL are required</div>`;
+        }
         return x`
     <div id="map-container">
         <div id="map"></div>
