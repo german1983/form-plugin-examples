@@ -1,27 +1,60 @@
 import { i, _ as _decorate, s, e, x, b as _get, c as _getPrototypeOf, a as e$1 } from './query-assigned-elements-b2b5ede8.js';
 import { i as i$1 } from './query-970c10e5.js';
 
+interface LastPosition {
+    quotLat: number;
+    quotLng: number;
+}
+
+let lastPosition: LastPosition = {
+    quotLat: 0,
+    quotLng: 0
+};
+
 const baseStyle = i`
-  #map {
-      height: auto;
-      width: 840px;
-      margin: 0px;
-  }
+  *{
+  margin:0
+}
+.gm-style-iw-tc {
+  display: none !important;
+}
 
-  #info-box {
-    background-color: #CDC9C8;
-    width: 810px;
-      background-color: white;
-      border-radius: 0px 0px 10px 10px;
-      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);
-    font-family: 'Open Sans';
-    padding: 10px;
-    padding-left: 20px;
-  }
+#info-box {
+background-color: #CDC9C8;
+width: 810px;
+  background-color: white;
+  border-radius: 0px 0px 10px 10px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);
+font-family: 'Open Sans';
+padding: 10px;
+padding-left: 20px;
 
-  .gm-style-iw-tc {
-      display: none !important;
-  }
+
+}
+
+.gm-style-iw-tc {
+  display: none !important;
+}
+#map-container {
+  margin:0;
+  width: 100%;
+  height: auto; /* Usar el 100% de la altura de la ventana */
+  max-width: 1280px; /* Ancho máximo de 1280px */
+  overflow: hidden; /* Ocultar el desplazamiento horizontal */
+}
+
+#map {
+  width: auto;
+  height: auto;
+  margin:0;
+}
+
+#map img {
+  margin:0;
+  display: block;
+  width: 100%; /* La imagen ocupa todo el ancho del contenedor */
+  height: auto; /* La altura se ajusta automáticamente */
+}
   :host {
     height: 100%;
     width: 100%;
@@ -184,8 +217,8 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
           var image = new Image();
           image.onload = () => {
             var _this$shadowRoot, _this$shadowRoot2;
-            defAnchoImg = image.width
-            defAltoImg = image.height
+            var defAnchoImg = image.width
+            var defAltoImg = image.height
             var resolucion = (defAltoImg/defAnchoImg)
             var anchoImg = window.innerWidth    //se adapta al ancho de la ventana
             if (anchoImg > image.width){
@@ -322,6 +355,17 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
                 strictBounds: true
               }
             });
+
+            if (!(lastPosition.quotLat==0 && lastPosition.quotLng==0)){
+              let lastPositionCord = {
+                  latMax : bounds.north,
+                  lngMax : bounds.east,
+                  percLat: lastPosition.quotLat,
+                  percLng: lastPosition.quotLng
+              };
+              let lastPositionCordJSON = JSON.stringify(lastPositionCord)
+              this.setPosition(lastPositionCordJSON)
+            }  
             this.marker.addListener('dragstart', () => {
               // Cerrar el InfoWindow si está abierto
               if (this.infoWindow !== null) {
@@ -338,38 +382,31 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
               // Verificar si la nueva posición está dentro de los límites de la imagen
               if (newLat > bounds.north || newLat < bounds.south || newLng > bounds.east || newLng < bounds.west) {
                 // Si la nueva posición está fuera de los límites, restablecer la posición a la inicial
-                this.setPosition(this.latitude, this.longitude);
-              } else {
-                // guardar posicion 
-                this.latitude = newLat;
-                this.longitude = newLng;
-
-                // Convertir las coordenadas a JSON y actualizar la posición
-                var coordenadas = {
-                  latitud: newLat,
-                  longitud: newLng
+                var lastPositionCord = {
+                    latMax : bounds.north,
+                    lngMax : bounds.east,
+                    percLat: lastPosition.quotLat,
+                    percLng: lastPosition.quotLng
+    
                 };
+                var lastPositionCordJSON = JSON.stringify(lastPositionCord)
+                this.setPosition(lastPositionCordJSON)
+              } else {
+               var coordenadas = {
+                    latMax : maxLat,
+                    lngMax : maxLng,
+                    percLat: newLat/maxLat,
+                    percLng: newLng/maxLng,
+                };
+                lastPosition.quotLat = newLat/maxLat
+                lastPosition.quotLng = newLng/maxLng
                 var coordenadasJSON = JSON.stringify(coordenadas);
-                console.log(coordenadasJSON);
-                this.setPosition(this.latitude, this.longitude);
+                
+                this.setPosition(coordenadasJSON);;
               }
             });
-            google.maps.event.addListener(this.map, 'bounds_changed', () => {
-              var overlayBounds = overlay.getBounds();
-              var mapBounds = this.map.getBounds();
-              if (!overlayBounds || !mapBounds) return;
-              var maxLat = overlayBounds.getNorthEast().lat();
-              var minLat = overlayBounds.getSouthWest().lat();
-              var maxLng = overlayBounds.getNorthEast().lng();
-              var minLng = overlayBounds.getSouthWest().lng();
-              var pinPosition = this.marker.getPosition();
-              var pinLat = pinPosition.lat();
-              var pinLng = pinPosition.lng();
-              if (pinLat > maxLat || pinLat < minLat || pinLng > maxLng || pinLng < minLng) {
-                this.marker.setPosition(this.marker.initialPosition);
-              }
-            });
-
+            
+           
             // evento clic al marcador para mostrar InfoWindow
             marker.addListener('click', function() {
             const latlng = marker.getPosition();
@@ -385,40 +422,20 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
             let altura = 0;
             let ancho = 0;
             const pinPosition = marker.getPosition();
-            const pinLat = pinPosition.lat();
-            const pinLng = pinPosition.lng();
         
-            // Obtener el tamaño del mapa
-            const mapContainer = document.getElementById('map-container');
-            const mapWidth = mapContainer.offsetWidth;
-            const mapHeight = mapContainer.offsetHeight;
-        
+            // Obtener el tamaño del mapa       
             
             let offsetX = 0;
             let offsetY = 0;
-        
-            if (pinLat > 1.35) {
-                altura = 250;
+            if (latitud > 0.05) {
+                altura = 135;
+            }
+            if (longitud < -0.5) {
+                ancho = 60;
+            } else if (longitud > 0.5) {
+                ancho = -60;
             }
         
-            if (pinLng < -2.75) {
-                ancho = 25;
-            } else if (pinLng > 2.25) {
-                ancho = -25;
-            }
-        
-            // Ajustar la posición del InfoWindow si se sale del mapa
-            if (pinLat > 1.35) {
-                offsetY = Math.min(mapHeight / 2 - 100, -100);
-            } else if (pinLat < -1.35) {
-                //offsetY = Math.max(-(mapHeight / 2 - 100), 100);
-            }
-        
-            if (pinLng < -2.75) {
-                offsetX = Math.max(-(mapWidth / 2 - 100), 100);
-            } else if (pinLng > 2.25) {
-                offsetX = Math.min(mapWidth / 2 - 100, -100);
-            }
         
             infoWindow = new google.maps.InfoWindow({
                 content: contentString,
@@ -438,20 +455,20 @@ let NetKelGoogleMapsOverlay = _decorate([e$1('netkel-google-maps-overlay')], fun
       kind: "method",
       key: "setPosition",
       value: function setPosition(latitud, longitud) {
-        var nuevaPosicion = new google.maps.LatLng(latitud, longitud);
-        this.latitude = latitud;
-        this.longitude = longitud;
-
+        var coordenadasObjeto = JSON.parse(coordenadasJSON);
+        var nuevaPosicion = new google.maps.LatLng(coordenadasObjeto.latMax * coordenadasObjeto.percLat, coordenadasObjeto.lngMax * coordenadasObjeto.percLng);
+    
         // Crear el evento con todas las propiedades
         var evento = {
-          latitud: latitud,
-          longitud: longitud
+            latitud: coordenadasObjeto.percLat,
+            longitud: coordenadasObjeto.percLng,
+            titulo: titulo,
+            descripcion: descripcion
         };
 
         // Serializar el evento a JSON
         var eventoJSON = JSON.stringify(evento);
         this.marker.setPosition(nuevaPosicion);
-        console.log(eventoJSON);
         const args = {
           bubbles: true,
           cancelable: false,
